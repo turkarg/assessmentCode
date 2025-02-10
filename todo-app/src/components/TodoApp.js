@@ -7,6 +7,7 @@ import TodoList from './TodoList';
 const TodoApp = () => {
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState("all");
+  const [totalTasks, setTotalTasks] = useState(0);
 
   useEffect(() => {
     // const storedTasks = JSON.parse(localStorage.getItem("tasks"));
@@ -16,6 +17,7 @@ const TodoApp = () => {
       .catch(console.log);
       console.log(storedTasks);
       if (storedTasks.todos.length > 0) {
+        setTotalTasks(storedTasks.todos.length);
         setTasks(storedTasks.todos);
       }
     }
@@ -28,7 +30,8 @@ const TodoApp = () => {
   }, [tasks]);
 
   const addTask = (todo) => {
-    setTasks([...tasks, { id: tasks.length + 1, todo, completed: false }]);
+    setTotalTasks(totalTasks + 1);
+    setTasks([...tasks, { id: totalTasks, todo, completed: false }]);
   };
 
   const toggleComplete = (id) => {
@@ -48,7 +51,7 @@ const TodoApp = () => {
 
   return (
     <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl mb-4">To-Do List</h1>
+      <h1 className="mb-4">To-Do List</h1>
       <AddTodo addTask={addTask} />
       <Filter filter={filter} setFilter={setFilter} />
       <TodoList tasks={filteredTasks} toggleComplete={toggleComplete} deleteTask={deleteTask} />
